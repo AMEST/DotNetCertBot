@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCertBot.Host", "DotNetCertBotCloudflare\DotNetCertBot.Host.csproj", "{EB2316AC-4995-473A-8735-65F7ABCCC6F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCertBot.Domain", "DotNetCertBot.Domain\DotNetCertBot.Domain.csproj", "{E917B877-C7F0-4E3E-AAA4-27D88F902C5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCertBot.NoOp", "DotNetCertBotCloudFlare.NoOp\DotNetCertBot.NoOp.csproj", "{93E9F7EB-E747-4E8E-B71A-30FA3481F075}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCertBot.LetsEncrypt", "DotNetCertBotCloudFlare.LetsEncrypt\DotNetCertBot.LetsEncrypt.csproj", "{231DAD32-DFE6-4CE0-BBDD-0FCAF26FF807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCertBot.CloudFlareUserApi", "DotNetCertBot.CloudFlareUserApi\DotNetCertBot.CloudFlareUserApi.csproj", "{51305A68-96AD-4CD4-9618-3A1C35FD58F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB2316AC-4995-473A-8735-65F7ABCCC6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2316AC-4995-473A-8735-65F7ABCCC6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2316AC-4995-473A-8735-65F7ABCCC6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2316AC-4995-473A-8735-65F7ABCCC6F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E917B877-C7F0-4E3E-AAA4-27D88F902C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E917B877-C7F0-4E3E-AAA4-27D88F902C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E917B877-C7F0-4E3E-AAA4-27D88F902C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E917B877-C7F0-4E3E-AAA4-27D88F902C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E9F7EB-E747-4E8E-B71A-30FA3481F075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E9F7EB-E747-4E8E-B71A-30FA3481F075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E9F7EB-E747-4E8E-B71A-30FA3481F075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E9F7EB-E747-4E8E-B71A-30FA3481F075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{231DAD32-DFE6-4CE0-BBDD-0FCAF26FF807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231DAD32-DFE6-4CE0-BBDD-0FCAF26FF807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231DAD32-DFE6-4CE0-BBDD-0FCAF26FF807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231DAD32-DFE6-4CE0-BBDD-0FCAF26FF807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51305A68-96AD-4CD4-9618-3A1C35FD58F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51305A68-96AD-4CD4-9618-3A1C35FD58F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51305A68-96AD-4CD4-9618-3A1C35FD58F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51305A68-96AD-4CD4-9618-3A1C35FD58F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {800D1317-E492-49F9-8460-C9FA0F64FFFB}
+	EndGlobalSection
+EndGlobal

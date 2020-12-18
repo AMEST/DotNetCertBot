@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DotNetCertBotCloudflare": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

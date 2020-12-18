@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Certes" Version="2.3.4" />
+    <PackageReference Include="CloudFlare.Client" Version="2.0.0-alpha.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetCertBot.CloudFlareUserApi\DotNetCertBot.CloudFlareUserApi.csproj" />
+    <ProjectReference Include="..\DotNetCertBot.Domain\DotNetCertBot.Domain.csproj" />
+    <ProjectReference Include="..\DotNetCertBotCloudFlare.LetsEncrypt\DotNetCertBot.LetsEncrypt.csproj" />
+    <ProjectReference Include="..\DotNetCertBotCloudFlare.NoOp\DotNetCertBot.NoOp.csproj" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="87.0.4280.8800" />
+  </ItemGroup>
+
+</Project>
