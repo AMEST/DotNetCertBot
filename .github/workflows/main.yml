@@ -1,9 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+name: Certbot Build
 on:
   push:
     branches: [ master ]
@@ -33,3 +29,33 @@ jobs:
         target: certbot
         tag_with_ref: true
         push: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/') }}
+
+  publish-cli-binary:
+    if: contains(github.ref, 'tags/v') # works only version tagged
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rid: [ win-x86, linux-x64]
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      NUGET_XMLDOC_MODE: skip
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Build
+      run: |
+        dotnet publish ./DotNetCertBot.Host/DotNetCertBot.Host.csproj -c Release --self-contained -r  ${{ matrix.rid }} -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./bin/CertBot.Cli-${{ matrix.rid }}
+        zip -r ${{ matrix.rid }} ./bin/CertBot.Cli-${{ matrix.rid }}
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./${{ matrix.rid }}.zip
+        asset_name: CertBot.Cli-${{ matrix.rid }}.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "Builded CertBot Cli"
