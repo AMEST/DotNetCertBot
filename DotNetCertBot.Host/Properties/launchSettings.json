@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "DotNetCertBotCloudflare": {
+    "DotNetCertBot.Host": {
       "commandName": "Project",
       "commandLineArgs": ""
     }

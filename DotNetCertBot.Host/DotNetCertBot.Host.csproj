@@ -17,8 +17,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DotNetCertBot.CloudFlareUserApi\DotNetCertBot.CloudFlareUserApi.csproj" />
     <ProjectReference Include="..\DotNetCertBot.Domain\DotNetCertBot.Domain.csproj" />
-    <ProjectReference Include="..\DotNetCertBotCloudFlare.LetsEncrypt\DotNetCertBot.LetsEncrypt.csproj" />
-    <ProjectReference Include="..\DotNetCertBotCloudFlare.NoOp\DotNetCertBot.NoOp.csproj" />
+    <ProjectReference Include="..\DotNetCertBot.LetsEncrypt\DotNetCertBot.LetsEncrypt.csproj" />
+    <ProjectReference Include="..\DotNetCertBot.NoOp\DotNetCertBot.NoOp.csproj" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="87.0.4280.8800" />
   </ItemGroup>
 

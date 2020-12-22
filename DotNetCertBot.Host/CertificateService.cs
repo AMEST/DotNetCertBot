@@ -34,7 +34,7 @@ namespace DotNetCertBot.Host
             {
                 await _acme.Validate(challenge);
                 cert = await _acme.GetCertificate(order);
-                await cert.WriteToFile();
+                await cert.WriteToFile(_configuration.GetOutput());
             }
             finally
             {

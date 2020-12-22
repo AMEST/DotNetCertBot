@@ -90,6 +90,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 var iSureDeleteButton =
                     _waiter.Until(d => d.FindElements(By.XPath("//span[text() = 'Delete']"))).SingleOrDefault();
                 await MouseClick(iSureDeleteButton);
+                await Task.Delay(TimeSpan.FromSeconds(5));
             });
         }
 
@@ -130,18 +131,6 @@ namespace DotNetCertBot.CloudFlareUserApi
                 var dnsButton = _waiter.Until(d => d.FindElement(By.XPath("//a[@title = 'DNS']")));
                 await MouseClick(dnsButton);
             });
-        }
-
-        private async Task WaitWhileLoadingTree(IWebElement element, By by)
-        {
-            var innerElements = element.FindElements(by);
-            var waitIteration = 0;
-            while (innerElements.Count < 1 || waitIteration < 15)
-            {
-                innerElements = element.FindElements(by);
-                waitIteration++;
-                await Task.Delay(TimeSpan.FromSeconds(1));
-            }
         }
 
         private async Task MouseClick(IWebElement element)
