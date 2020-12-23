@@ -1,3 +1,7 @@
+![Certbot Build](https://github.com/AMEST/DotNetCertBot/workflows/Certbot%20Build/badge.svg)
+![hub.docker.com](https://img.shields.io/docker/pulls/eluki/freenom-cloudflare-certbot.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/amest/DotNetCertBot)
+![GitHub](https://img.shields.io/github/license/amest/DotNetCertBot)
 # DotNetCertBot with cloudflare DNS challenge for [Freenom](https://freenom.com) domains
 
 - [DotNetCertBot with cloudflare DNS challenge for Freenom domains](#dotnetcertbot-with-cloudflare-dns-challenge-for-freenom-domains)
