@@ -6,6 +6,9 @@
     - [CommandLine arguments:](#commandline-arguments)
       - [Windows cmd](#windows-cmd)
       - [Docker container (linux)](#docker-container-linux)
+  - [How to build](#how-to-build)
+      - [Build binaries](#build-binaries)
+      - [Build docker container](#build-docker-container)
 
 ## Description
 The app was written in connection with CloudFlare's restrictions on using its api to manage DNS records .tk .ml .cf and other free domain names from Freenom.
@@ -46,4 +49,19 @@ docker run -v /tmp/certbot:/certbot/certs \
             -z example.tk \
             -d subdomain.example.tk \
             -o certs
+```
+
+## How to build
+
+#### Build binaries
+
+Two scripts are prepared for the build, after running which, the compiled application with all dependencies, including chromedriver, will appear in the published folder.
+Scripts:
+1. `Build-linux.sh` - start build application for linux-x64
+2. `Build-winx86.bat` - start build application for win-x86   
+
+#### Build docker container
+
+```
+docker build -t certbot .
 ```

@@ -49,6 +49,7 @@ jobs:
     - name: Build
       run: |
         dotnet publish ./DotNetCertBot.Host/DotNetCertBot.Host.csproj -c Release --self-contained -r  ${{ matrix.rid }} -p:PublishSingleFile=true -p:PublishTrimmed=true -o ./bin/CertBot.Cli-${{ matrix.rid }}
+        find . -type f -name "chromedriver*" -exec cp -n {} ./bin/CertBot.Cli-${{ matrix.rid }} \;
         zip -r ${{ matrix.rid }} ./bin/CertBot.Cli-${{ matrix.rid }}
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
