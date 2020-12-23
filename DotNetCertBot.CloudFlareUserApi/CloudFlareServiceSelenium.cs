@@ -45,10 +45,11 @@ namespace DotNetCertBot.CloudFlareUserApi
             _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
         }
 
-        public Task<bool> CheckAuth()
+        public async Task<bool> CheckAuth()
         {
-            var spanList = _driver.FindElementsByTagName("span");
-            return Task.Run(() =>
+            await Task.Delay(TimeSpan.FromSeconds(10));
+            var spanList = _driver.FindElementsByTagName("span"); 
+            return await Task.Run(() =>
                 !spanList.Any(span => span.Text.Equals("Log in to Cloudflare", StringComparison.OrdinalIgnoreCase)));
         }
 
