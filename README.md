@@ -9,7 +9,8 @@
   - [How to build](#how-to-build)
       - [Build binaries](#build-binaries)
       - [Build docker container](#build-docker-container)
-
+## Links
+* [Docker Hub](https://hub.docker.com/r/eluki/freenom-cloudflare-certbot)
 ## Description
 The app was written in connection with CloudFlare's restrictions on using its api to manage DNS records .tk .ml .cf and other free domain names from Freenom.
 
@@ -43,7 +44,7 @@ For start container and issue certificate, run next command:
 docker run -v /tmp/certbot:/certbot/certs \
            --rm \ 
            -it \
-           eluki/freenom-cloudflare-certbot \
+           eluki/freenom-cloudflare-certbot:v0.0.1-alpha \
             -e example@gmail.com \
             -p VerySecretCloudflarePass \
             -z example.tk \
