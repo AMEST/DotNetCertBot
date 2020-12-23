@@ -18,7 +18,7 @@ namespace DotNetCertBot.CloudFlareUserApi
         private readonly ILogger<CloudFlareServiceSelenium> _logger;
         private ChromeDriver _driver;
         private WebDriverWait _waiter;
-        private const string CloudFlareLoginUrl = "https://dash.cloudflare.com/login";
+        private const string CloudFlareLoginUrl = "https://dash.cloudflare.com/login?lang=en-US";
 
         public CloudFlareServiceSelenium(IConfiguration configuration, ILogger<CloudFlareServiceSelenium> logger)
         {
@@ -34,6 +34,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             chromeOptions.AddExcludedArgument("enable-automation");
             chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
             chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
+            chromeOptions.AddArgument("--lang=en-US");
             _driver = new ChromeDriver(chromeOptions);
             _driver.ExecuteScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
             _driver.ExecuteChromeCommand("Network.setUserAgentOverride", new Dictionary<string, object>
