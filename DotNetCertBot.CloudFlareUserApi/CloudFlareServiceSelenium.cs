@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using DotNetCertBot.Domain;
@@ -16,8 +15,8 @@ namespace DotNetCertBot.CloudFlareUserApi
     public class CloudFlareServiceSelenium : ICloudFlareService
     {
         private readonly ILogger<CloudFlareServiceSelenium> _logger;
-        private ChromeDriver _driver;
-        private WebDriverWait _waiter;
+        private readonly ChromeDriver _driver;
+        private readonly WebDriverWait _waiter;
         private const string CloudFlareLoginUrl = "https://dash.cloudflare.com/login?lang=en-US";
 
         public CloudFlareServiceSelenium(IConfiguration configuration, ILogger<CloudFlareServiceSelenium> logger)
@@ -48,7 +47,7 @@ namespace DotNetCertBot.CloudFlareUserApi
         public async Task<bool> CheckAuth()
         {
             await Task.Delay(TimeSpan.FromSeconds(10));
-            var spanList = _driver.FindElementsByTagName("span"); 
+            var spanList = _driver.FindElementsByTagName("span");
             return await Task.Run(() =>
                 !spanList.Any(span => span.Text.Equals("Log in to Cloudflare", StringComparison.OrdinalIgnoreCase)));
         }
@@ -83,7 +82,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             return Task.Run(async () =>
             {
                 var normalizedName = NormalizeDnsName(name, zoneName);
-                _logger.LogInformation("Remove {txtName} form zone {zoneName}",normalizedName,zoneName);
+                _logger.LogInformation("Remove {txtName} form zone {zoneName}", normalizedName, zoneName);
                 var dnsRecord = _waiter.Until(d =>
                     d.FindElement(By.XPath($"//div[contains(text(),'{normalizedName}')]")));
                 await MouseClick(dnsRecord);

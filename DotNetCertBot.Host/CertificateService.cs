@@ -29,11 +29,10 @@ namespace DotNetCertBot.Host
             var challenge = await _acme.ChallengeDNS(order);
 
             await _cloudFlareService.AddChallenge(challenge, _configuration.GetZone());
-            CertificateResult cert;
             try
             {
                 await _acme.Validate(challenge);
-                cert = await _acme.GetCertificate(order);
+                var cert = await _acme.GetCertificate(order);
                 await cert.WriteToFile(_configuration.GetOutput());
             }
             finally

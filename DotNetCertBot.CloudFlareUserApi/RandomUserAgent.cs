@@ -6,7 +6,7 @@ namespace DotNetCertBot.CloudFlareUserApi
 {
     public static class RandomUserAgent
     {
-        private static IList<string> _userAgents = new List<string>
+        private static readonly IList<string> UserAgents = new List<string>
         {
             "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
@@ -21,9 +21,10 @@ namespace DotNetCertBot.CloudFlareUserApi
             "Mozilla/5.0 (Linux; Android 9; Mi A3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.136 Mobile Safari/537.36",
             "Mozilla/5.0 (Linux; Android 10; SAMSUNG SM-N960F) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36"
         };
+
         public static string Generate()
         {
-            return _userAgents.OrderBy(q => Guid.NewGuid()).First();
+            return UserAgents.OrderBy(q => Guid.NewGuid()).First();
         }
     }
 }

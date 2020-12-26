@@ -13,7 +13,6 @@ namespace DotNetCertBot.LetsEncrypt
     {
         private readonly ILogger<LetsEncryptService> _logger;
         private readonly IAcmeContext _acme = new AcmeContext(WellKnownServers.LetsEncryptV2);
-        private IAccountContext _account;
 
         public LetsEncryptService(ILogger<LetsEncryptService> logger)
         {
@@ -22,7 +21,7 @@ namespace DotNetCertBot.LetsEncrypt
 
         public async Task Login(string email)
         {
-            _account = await _acme.NewAccount(email, true);
+            await _acme.NewAccount(email, true);
         }
 
         public async Task<ChallengeOrder> CreateOrder(string domain)
@@ -57,13 +56,13 @@ namespace DotNetCertBot.LetsEncrypt
             await Task.Delay(TimeSpan.FromMinutes(2));
             var challengeValidation = await challengeConext.Validate();
             var validateCount = 1;
-            while (challengeValidation.Status == ChallengeStatus.Pending && validateCount < 5)
+            while (challengeValidation?.Status == ChallengeStatus.Pending && validateCount < 5)
             {
                 await Task.Delay(TimeSpan.FromMinutes(1));
                 challengeValidation = await challengeConext.Validate();
                 if (!string.IsNullOrEmpty(challengeValidation?.Error?.Detail))
                     _logger.LogWarning("Error detail:{errorsDetail}\nError statusCode:{errorsStatusCode}",
-                        challengeValidation?.Error?.Detail, challengeValidation?.Error?.Status);
+                        challengeValidation.Error?.Detail, challengeValidation.Error?.Status);
                 _logger.LogInformation("Validation status:{status}", challengeValidation?.Status);
             }
         }

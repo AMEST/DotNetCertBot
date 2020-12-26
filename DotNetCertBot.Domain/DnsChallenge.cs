@@ -1,6 +1,5 @@
 ﻿namespace DotNetCertBot.Domain
 {
-
     public class DnsChallenge
     {
         public string Name { get; set; }

@@ -4,7 +4,6 @@ namespace DotNetCertBot.Domain
 {
     public interface IAcmeService
     {
-
         Task Login(string email);
 
         Task<ChallengeOrder> CreateOrder(string domain);

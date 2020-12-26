@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetCertBot.Host
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var provider = ApplicationExtensions.ConfigureApp(services =>
             {
