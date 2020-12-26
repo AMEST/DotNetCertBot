@@ -25,14 +25,18 @@ namespace DotNetCertBot.Host
             if (!string.IsNullOrWhiteSpace(outputPath))
                 path = outputPath;
             //Write Cert
-            using (var writer = File.CreateText(Path.Combine(path, $"{certificate.Domain}.pem")))
+            var certFilePath = Path.Combine(path, $"{certificate.Domain}.pem");
+            using (var writer = File.CreateText(certFilePath))
             {
                 await writer.WriteLineAsync(certificate.Cert);
+                Console.WriteLine($"Certificate writed to {certFilePath}");
             }
             //Write Key
-            using (var writer = File.CreateText(Path.Combine(path, $"{certificate.Domain}.key")))
+            var keyFilePath = Path.Combine(path, $"{certificate.Domain}.key");
+            using (var writer = File.CreateText(keyFilePath))
             {
                 await writer.WriteLineAsync(certificate.Key);
+                Console.WriteLine($"Key writed to {keyFilePath}");
             }
         }
     }
