@@ -11,52 +11,12 @@ namespace DotNetCertBot.Host
 {
     public static class ApplicationExtensions
     {
-        public static IConfiguration CreateConfiguration(this string[] args)
-        {
-            var switchMappings = new Dictionary<string, string>()
-            {
-                { "-d", "domain" },
-                { "-z", "zone" },
-                { "-e", "email" },
-                { "-p", "password" },
-                { "-o", "output" },
-                { "-h", "headless" }
-            };
-            var builder = new ConfigurationBuilder().AddCommandLine(args, switchMappings);
-            return builder.Build();
-        }
-
         public static IServiceProvider ConfigureApp(Action<IServiceCollection> buildAction)
         {
             var collection = new ServiceCollection();
             collection.AddLogging(b => b.AddConsole());
             buildAction?.Invoke(collection);
             return collection.BuildServiceProvider().CreateScope().ServiceProvider;
-        }
-
-        public static string GetEmail(this IConfiguration configuration)
-        {
-            return configuration["email"];
-        }
-
-        public static string GetPassword(this IConfiguration configuration)
-        {
-            return configuration["password"];
-        }
-
-        public static string GetDomain(this IConfiguration configuration)
-        {
-            return configuration["domain"];
-        }
-
-        public static string GetZone(this IConfiguration configuration)
-        {
-            return configuration["zone"];
-        }
-
-        public static string GetOutput(this IConfiguration configuration)
-        {
-            return configuration["output"];
         }
 
         public static async Task WriteToFile(this CertificateResult certificate, string outputPath = null)

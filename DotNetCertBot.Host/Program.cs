@@ -12,10 +12,25 @@ namespace DotNetCertBot.Host
         {
             var provider = ApplicationExtensions.ConfigureApp(services =>
             {
+                var configuration = args.CreateConfiguration();
                 services.AddSingleton<CertificateService>();
-                services.AddSingleton(args.CreateConfiguration());
-                services.AddCloudFlare();
-                services.AddLetsEncrypt();
+                services.AddSingleton(configuration);
+                switch (configuration.GetNoOp())
+                {
+                    case ConfigurationExtensions.NoOpMode.Full:
+                        services.AddNoOpAcme();
+                        services.AddNoOpCloudFlare();
+                        break;
+                    case ConfigurationExtensions.NoOpMode.Acme:
+                        services.AddNoOpAcme();
+                        services.AddCloudFlare();
+                        break;
+                    case ConfigurationExtensions.NoOpMode.None:
+                    default:
+                        services.AddLetsEncrypt();
+                        services.AddCloudFlare();
+                        break;
+                }
             });
 
             using var scope = provider.CreateScope();

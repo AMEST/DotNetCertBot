@@ -5,6 +5,7 @@
 # DotNetCertBot with cloudflare DNS challenge for [Freenom](https://freenom.com) domains
 
 - [DotNetCertBot with cloudflare DNS challenge for Freenom domains](#dotnetcertbot-with-cloudflare-dns-challenge-for-freenom-domains)
+  - [Links](#links)
   - [Description](#description)
   - [How to use](#how-to-use)
     - [CommandLine arguments:](#commandline-arguments)
@@ -22,14 +23,15 @@ Under the hood is a regular client up to Let's encrypt and the code for the sele
 
 ## How to use
 ### CommandLine arguments:
-| Argument |                                      Description                                       |
-| -------- | -------------------------------------------------------------------------------------- |
-| -e       | Required. Email for cloudflare (and it use for let's enctypt)                          |
-| -p       | Required. Password for cloudflare account                                              |
-| -z       | Required. Zone name in cloudflare (main domain name)                                   |
-| -d       | Required. Domain name for which the certificate is issued (is a subdomain of the zone) |
-| -h       | (Default: true) Selenium driver headless mode                                          |
-| -o       | (Default: app directory) Directory where saved generated certificates                  |
+| Argument |                                                        Description                                                         |
+| -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| -e       | Required. Email for cloudflare (and it use for let's enctypt)                                                              |
+| -p       | Required. Password for cloudflare account                                                                                  |
+| -z       | Required. Zone name in cloudflare (main domain name)                                                                       |
+| -d       | Required. Domain name for which the certificate is issued (is a subdomain of the zone)                                     |
+| -h       | (Default: true) Selenium driver headless mode                                                                              |
+| -o       | (Default: app directory) Directory where saved generated certificates                                                      |
+| --noop   | (Default: None) Noop mode start half functional or test mode for tesing sctipts or schedules. NoOp modes (full,acme, none) |
 
 #### Windows cmd
 For issue certificate on windows (not in container), on pc should be installed chrome 87.xx version. If chrome installed and app downloaded, you can run next command for automatic issue certificate.
