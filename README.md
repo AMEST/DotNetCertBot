@@ -50,7 +50,7 @@ For start container and issue certificate, run next command:
 docker run -v /tmp/certbot:/certbot/certs \
            --rm \ 
            -it \
-           eluki/freenom-cloudflare-certbot:v0.0.1-alpha \
+           eluki/freenom-cloudflare-certbot \
             -e example@gmail.com \
             -p VerySecretCloudflarePass \
             -z example.tk \
