@@ -6,8 +6,8 @@ namespace DotNetCertBot.CloudFlareUserApi
     {
         public static bool IsHeadless(this IConfiguration configuration)
         {
-            return string.IsNullOrEmpty(configuration["headless"])
-                   || bool.Parse(configuration["headless"]);
+            return string.IsNullOrEmpty(configuration["Headless"])
+                   || bool.Parse(configuration["Headless"]);
         }
     }
 }

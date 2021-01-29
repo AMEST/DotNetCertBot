@@ -3,7 +3,7 @@ using DotNetCertBot.Domain;
 
 namespace DotNetCertBot.NoOp
 {
-    public class NoOpCloudFlare:ICloudFlareService
+    public class NoOpDnsProvider:IDnsProviderService
     {
         public void Dispose()
         {

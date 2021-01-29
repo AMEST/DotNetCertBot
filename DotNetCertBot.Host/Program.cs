@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DotNetCertBot.CloudFlareUserApi;
+using DotNetCertBot.Domain;
+using DotNetCertBot.FreenomDnsProvider;
 using DotNetCertBot.LetsEncrypt;
 using DotNetCertBot.NoOp;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,22 +16,24 @@ namespace DotNetCertBot.Host
             var provider = ApplicationExtensions.ConfigureApp(services =>
             {
                 var configuration = args.CreateConfiguration();
-                services.AddSingleton<CertificateService>();
+                var certbotConfiguration = configuration.GetConfiguration();
+                services.AddSingleton(certbotConfiguration);
                 services.AddSingleton(configuration);
-                switch (configuration.GetNoOp())
+                services.AddSingleton<CertificateService>();
+                switch (certbotConfiguration.NoOp)
                 {
-                    case ConfigurationExtensions.NoOpMode.Full:
+                    case NoOpMode.Full:
                         services.AddNoOpAcme();
-                        services.AddNoOpCloudFlare();
+                        services.AddNoOpDnsProvider();
                         break;
-                    case ConfigurationExtensions.NoOpMode.Acme:
+                    case NoOpMode.Acme:
                         services.AddNoOpAcme();
-                        services.AddCloudFlare();
+                        RegisterDnsProvider(services,certbotConfiguration);
                         break;
-                    case ConfigurationExtensions.NoOpMode.None:
+                    case NoOpMode.None:
                     default:
                         services.AddLetsEncrypt();
-                        services.AddCloudFlare();
+                        RegisterDnsProvider(services, certbotConfiguration);
                         break;
                 }
             });
@@ -36,6 +41,20 @@ namespace DotNetCertBot.Host
             using var scope = provider.CreateScope();
             var certificateService = scope.ServiceProvider.GetService<CertificateService>();
             await certificateService.Issue();
+        }
+
+        private static void RegisterDnsProvider(IServiceCollection services, CertBotConfiguration configuration)
+        {
+            switch (configuration.Provider)
+            {
+                case DnsProvider.Freenom:
+                    services.AddFreenomDnsProvider();
+                    break;
+                case DnsProvider.CloudFlare:
+                default:
+                    services.AddCloudFlareDnsProvider();
+                    break;
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace DotNetCertBot.CloudFlareUserApi
 {
-    public class CloudFlareServiceSelenium : ICloudFlareService
+    public class CloudFlareServiceSelenium : IDnsProviderService
     {
         private readonly ILogger<CloudFlareServiceSelenium> _logger;
         private readonly ChromeDriver _driver;

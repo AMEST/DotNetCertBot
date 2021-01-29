@@ -5,9 +5,9 @@ namespace DotNetCertBot.NoOp
 {
     public static class ServicesExtensions
     {
-        public static IServiceCollection AddNoOpCloudFlare(this IServiceCollection services)
+        public static IServiceCollection AddNoOpDnsProvider(this IServiceCollection services)
         {
-            services.AddSingleton<ICloudFlareService, NoOpCloudFlare>();
+            services.AddSingleton<IDnsProviderService, NoOpDnsProvider>();
             return services;
         }
 
