@@ -56,7 +56,7 @@ namespace DotNetCertBot.LetsEncrypt
             await Task.Delay(TimeSpan.FromMinutes(2));
             var challengeValidation = await challengeConext.Validate();
             var validateCount = 1;
-            while (challengeValidation?.Status == ChallengeStatus.Pending && validateCount < 5)
+            while (challengeValidation?.Status == ChallengeStatus.Pending && validateCount < 8)
             {
                 await Task.Delay(TimeSpan.FromMinutes(1));
                 challengeValidation = await challengeConext.Validate();
