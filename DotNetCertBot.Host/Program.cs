@@ -28,7 +28,7 @@ namespace DotNetCertBot.Host
                         break;
                     case NoOpMode.Acme:
                         services.AddNoOpAcme();
-                        RegisterDnsProvider(services,certbotConfiguration);
+                        RegisterDnsProvider(services, certbotConfiguration);
                         break;
                     case NoOpMode.None:
                     default:

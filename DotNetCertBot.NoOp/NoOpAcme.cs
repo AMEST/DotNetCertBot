@@ -4,7 +4,7 @@ using DotNetCertBot.Domain;
 
 namespace DotNetCertBot.NoOp
 {
-    public class NoOpAcme: IAcmeService
+    public class NoOpAcme : IAcmeService
     {
         public Task Login(string email)
         {
@@ -13,12 +13,12 @@ namespace DotNetCertBot.NoOp
 
         public Task<ChallengeOrder> CreateOrder(string domain)
         {
-            return Task.FromResult(new ChallengeOrder{DnsName = domain});
+            return Task.FromResult(new ChallengeOrder {DnsName = domain});
         }
 
         public Task<DnsChallenge> ChallengeDNS(ChallengeOrder order)
         {
-            return Task.FromResult(new DnsChallenge{Name = "_acme-challenge.bot",Value = "1234"});
+            return Task.FromResult(new DnsChallenge {Name = "_acme-challenge.bot", Value = "1234"});
         }
 
         public Task Validate(DnsChallenge challenge)

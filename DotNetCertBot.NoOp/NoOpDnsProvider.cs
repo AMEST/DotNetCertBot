@@ -3,7 +3,7 @@ using DotNetCertBot.Domain;
 
 namespace DotNetCertBot.NoOp
 {
-    public class NoOpDnsProvider:IDnsProviderService
+    public class NoOpDnsProvider : IDnsProviderService
     {
         public void Dispose()
         {

@@ -17,7 +17,7 @@ namespace DotNetCertBot.Host
                 {"-p", "Password"},
                 {"-o", "Output"},
                 {"-h", "Headless"},
-                {"--provider", "Provider" },
+                {"--provider", "Provider"},
                 {"--noop", "NoOp"}
             };
             var builder = new ConfigurationBuilder().AddCommandLine(args, switchMappings);
