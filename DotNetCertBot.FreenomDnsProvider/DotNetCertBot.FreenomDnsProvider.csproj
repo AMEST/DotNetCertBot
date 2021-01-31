@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Skidbladnir.Client.Freenom.Dns" Version="0.0.1-build0003" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.10" />
   </ItemGroup>
 
   <ItemGroup>

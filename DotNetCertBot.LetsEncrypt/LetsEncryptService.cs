@@ -12,7 +12,7 @@ namespace DotNetCertBot.LetsEncrypt
     public class LetsEncryptService : IAcmeService
     {
         private readonly ILogger<LetsEncryptService> _logger;
-        private readonly IAcmeContext _acme = new AcmeContext(WellKnownServers.LetsEncryptV2);
+        private IAcmeContext _acme = new AcmeContext(WellKnownServers.LetsEncryptV2,badNonceRetryCount: 5);
 
         public LetsEncryptService(ILogger<LetsEncryptService> logger)
         {
@@ -52,17 +52,24 @@ namespace DotNetCertBot.LetsEncrypt
         public async Task Validate(DnsChallenge challenge)
         {
             var challengeConext = (IChallengeContext) challenge.Context;
+
             _logger.LogInformation("Wait 2 minutes while dns records apply and let's encrypt can validate challenge");
             await Task.Delay(TimeSpan.FromMinutes(2));
+
             var challengeValidation = await challengeConext.Validate();
+            _logger.LogInformation("Validation status:{status}", challengeValidation?.Status);
+
             var validateCount = 1;
-            while (challengeValidation?.Status == ChallengeStatus.Pending && validateCount < 8)
+            while (challengeValidation?.Status != ChallengeStatus.Valid && validateCount++ < 30)
             {
                 await Task.Delay(TimeSpan.FromMinutes(1));
-                challengeValidation = await challengeConext.Validate();
+
+                challengeValidation = await challengeConext.Resource();
+
                 if (!string.IsNullOrEmpty(challengeValidation?.Error?.Detail))
                     _logger.LogWarning("Error detail:{errorsDetail}\nError statusCode:{errorsStatusCode}",
                         challengeValidation.Error?.Detail, challengeValidation.Error?.Status);
+
                 _logger.LogInformation("Validation status:{status}", challengeValidation?.Status);
             }
         }
