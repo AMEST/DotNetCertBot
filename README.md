@@ -2,36 +2,52 @@
 ![hub.docker.com](https://img.shields.io/docker/pulls/eluki/freenom-cloudflare-certbot.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/amest/DotNetCertBot)
 ![GitHub](https://img.shields.io/github/license/amest/DotNetCertBot)
+
 # DotNetCertBot with cloudflare DNS challenge for [Freenom](https://freenom.com) domains
 
 - [DotNetCertBot with cloudflare DNS challenge for Freenom domains](#dotnetcertbot-with-cloudflare-dns-challenge-for-freenom-domains)
   - [Links](#links)
   - [Description](#description)
   - [How to use](#how-to-use)
+    - [Available providers](#available-providers)
     - [CommandLine arguments:](#commandline-arguments)
       - [Windows cmd](#windows-cmd)
       - [Docker container (linux)](#docker-container-linux)
   - [How to build](#how-to-build)
       - [Build binaries](#build-binaries)
       - [Build docker container](#build-docker-container)
+  
 ## Links
+
 * [Docker Hub](https://hub.docker.com/r/eluki/freenom-cloudflare-certbot)
+
 ## Description
+
 The app was written in connection with CloudFlare's restrictions on using its api to manage DNS records .tk .ml .cf and other free domain names from Freenom.
 
 Under the hood is a regular client up to Let's encrypt and the code for the selenium driver, where the application automatically, emulating the behavior of the login user in cloudflare, selects the desired zone, adds an entry for the DNS Challenge and after the request is validated by the certification authority, saves the certificate and deletes the entry from the DNS
 
+Also added the ability to issue certificates for domains issued through Freenom and continue to use the standard dns provided by Freenom. To do this, you need to specify the required provider: `--provider freenom`
+
 ## How to use
+
+### Available providers
+
+Available DNS providers for acme dns challenge:
+1. Cloudflare - Used headless chrome, for issue certificate for free freenom domains. Also suitable for another domains who use cloudflare dns
+1. Freenom - suitable for issuing certificates for domains that have been registered through Freenom or using freenom dns
+
 ### CommandLine arguments:
-| Argument |                                                        Description                                                         |
-| -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| -e       | Required. Email for cloudflare (and it use for let's enctypt)                                                              |
-| -p       | Required. Password for cloudflare account                                                                                  |
-| -z       | Required. Zone name in cloudflare (main domain name)                                                                       |
-| -d       | Required. Domain name for which the certificate is issued (is a subdomain of the zone)                                     |
-| -h       | (Default: true) Selenium driver headless mode                                                                              |
-| -o       | (Default: app directory) Directory where saved generated certificates                                                      |
-| --noop   | (Default: None) Noop mode start half functional or test mode for tesing sctipts or schedules. NoOp modes (full,acme, none) |
+|  Argument  |                                                                Description                                                                |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| -e         | Required. Email for cloudflare (and it use for let's enctypt)                                                                             |
+| -p         | Required. Password for cloudflare account                                                                                                 |
+| -z         | Required. Zone name in cloudflare (main domain name)                                                                                      |
+| -d         | Required. Domain name for which the certificate is issued (is a subdomain of the zone)                                                    |
+| --provider | (Default: cloudflare) DNS provider through which the dns record will be added for validation through ACME. Providers: Cloudflare, freenom |
+| -h         | (Default: true) Selenium driver headless mode                                                                                             |
+| -o         | (Default: app directory) Directory where saved generated certificates                                                                     |
+| --noop     | (Default: None) Noop mode start half functional or test mode for tesing sctipts or schedules. NoOp modes (full,acme, none)                |
 
 #### Windows cmd
 For issue certificate on windows (not in container), on pc should be installed chrome 87.xx version. If chrome installed and app downloaded, you can run next command for automatic issue certificate.

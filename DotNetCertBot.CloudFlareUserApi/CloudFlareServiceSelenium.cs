@@ -12,7 +12,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace DotNetCertBot.CloudFlareUserApi
 {
-    public class CloudFlareServiceSelenium : ICloudFlareService
+    public class CloudFlareServiceSelenium : IDnsProviderService
     {
         private readonly ILogger<CloudFlareServiceSelenium> _logger;
         private readonly ChromeDriver _driver;
@@ -72,8 +72,9 @@ namespace DotNetCertBot.CloudFlareUserApi
         public async Task AddChallenge(DnsChallenge challenge, string zoneName)
         {
             _logger.LogInformation("Add txt record '{txtName} to zone {zoneName}'", challenge.Name, zoneName);
+            await Task.Delay(TimeSpan.FromSeconds(10));
             await GoToZoneDns(zoneName);
-            await Task.Delay(TimeSpan.FromMilliseconds(386));
+            await Task.Delay(TimeSpan.FromMilliseconds(640));
             await AddTxtRecord(NormalizeDnsName(challenge.Name, zoneName), challenge.Value);
         }
 

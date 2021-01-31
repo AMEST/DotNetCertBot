@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DotNetCertBot.Domain
 {
-    public interface ICloudFlareService: IDisposable
+    public interface IDnsProviderService : IDisposable
     {
         Task<bool> CheckAuth();
 

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Certes" Version="2.3.4" />
+    <PackageReference Include="Nightly-Certes" Version="2.3.4-unstalable.0.23" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.10" />
   </ItemGroup>

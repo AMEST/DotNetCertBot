@@ -29,6 +29,7 @@ namespace DotNetCertBot.Host
                 await writer.WriteLineAsync(certificate.Cert);
                 Console.WriteLine($"Certificate writed to {certFilePath}");
             }
+
             //Write Key
             var keyFilePath = Path.Combine(path, $"{certificate.Domain}.key");
             await using (var writer = File.CreateText(keyFilePath))

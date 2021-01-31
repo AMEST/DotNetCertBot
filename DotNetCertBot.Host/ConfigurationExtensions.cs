@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DotNetCertBot.Domain;
 using Microsoft.Extensions.Configuration;
 
 namespace DotNetCertBot.Host
@@ -10,56 +11,24 @@ namespace DotNetCertBot.Host
         {
             var switchMappings = new Dictionary<string, string>()
             {
-                {"-d", "domain"},
-                {"-z", "zone"},
-                {"-e", "email"},
-                {"-p", "password"},
-                {"-o", "output"},
-                {"-h", "headless"},
-                {"--noop", "noop"}
+                {"-d", "Domain"},
+                {"-z", "Zone"},
+                {"-e", "Email"},
+                {"-p", "Password"},
+                {"-o", "Output"},
+                {"-h", "Headless"},
+                {"--provider", "Provider"},
+                {"--noop", "NoOp"}
             };
             var builder = new ConfigurationBuilder().AddCommandLine(args, switchMappings);
             return builder.Build();
         }
 
-
-        public static string GetEmail(this IConfiguration configuration)
+        public static CertBotConfiguration GetConfiguration(this IConfiguration configuration)
         {
-            return configuration["email"];
-        }
-
-        public static string GetPassword(this IConfiguration configuration)
-        {
-            return configuration["password"];
-        }
-
-        public static string GetDomain(this IConfiguration configuration)
-        {
-            return configuration["domain"];
-        }
-
-        public static string GetZone(this IConfiguration configuration)
-        {
-            return configuration["zone"];
-        }
-
-        public static string GetOutput(this IConfiguration configuration)
-        {
-            return configuration["output"];
-        }
-
-        public static NoOpMode GetNoOp(this IConfiguration configuration)
-        {
-            return Enum.TryParse(typeof(NoOpMode), configuration["noop"], true, out var noopMode)
-                ? (NoOpMode) noopMode
-                : NoOpMode.None;
-        }
-
-        public enum NoOpMode
-        {
-            None,
-            Acme,
-            Full
+            var config = new CertBotConfiguration();
+            configuration.Bind(config);
+            return config;
         }
     }
 }

@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "DotNetCertBot.Host": {
-      "commandName": "Project",
-      "commandLineArgs": ""
-    }
-  }
-}

@@ -1,45 +1,56 @@
-﻿using System;
+﻿using DotNetCertBot.Domain;
+using System;
 using System.Threading.Tasks;
-using DotNetCertBot.Domain;
-using Microsoft.Extensions.Configuration;
+using Certes;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCertBot.Host
 {
     public class CertificateService
     {
+        private readonly ILogger<CertificateService> _logger;
         private readonly IAcmeService _acme;
-        private readonly ICloudFlareService _cloudFlareService;
-        private readonly IConfiguration _configuration;
+        private readonly IDnsProviderService _dnsProviderService;
+        private readonly CertBotConfiguration _configuration;
 
-        public CertificateService(IAcmeService acme, ICloudFlareService cloudFlareService, IConfiguration configuration)
+        public CertificateService(ILogger<CertificateService> logger, IAcmeService acme,
+            IDnsProviderService dnsProviderService, CertBotConfiguration configuration)
         {
+            _logger = logger;
             _acme = acme;
-            _cloudFlareService = cloudFlareService;
+            _dnsProviderService = dnsProviderService;
             _configuration = configuration;
         }
 
         public async Task Issue()
         {
-            await _acme.Login(_configuration.GetEmail()); var isAuth = await _cloudFlareService.CheckAuth();
-            if(!isAuth)
-                if(!await _cloudFlareService.Login(_configuration.GetEmail(), _configuration.GetPassword()))
-                    throw new Exception("Can't authorize in cloudflare");
+            await _acme.Login(_configuration.Email);
+            var isAuth = await _dnsProviderService.CheckAuth();
+            if (!isAuth)
+                if (!await _dnsProviderService.Login(_configuration.Email, _configuration.Password))
+                    throw new Exception("Can't authorize in dns provider");
 
-            var order = await _acme.CreateOrder(_configuration.GetDomain());
+            var order = await _acme.CreateOrder(_configuration.Domain);
             var challenge = await _acme.ChallengeDNS(order);
-
-            await _cloudFlareService.AddChallenge(challenge, _configuration.GetZone());
+            _logger.LogInformation("Adding TXT Record: {Name}\t{Value}", challenge.Name, challenge.Value);
+            await _dnsProviderService.AddChallenge(challenge, _configuration.Zone);
             try
             {
                 await _acme.Validate(challenge);
                 var cert = await _acme.GetCertificate(order);
-                await cert.WriteToFile(_configuration.GetOutput());
+                await cert.WriteToFile(_configuration.Output);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in validating or certificate download process");
+                throw;
             }
             finally
             {
-                await _cloudFlareService.ClearChallenge(_configuration.GetZone(), challenge.Name);
+                await _dnsProviderService.ClearChallenge(_configuration.Zone, challenge.Name);
             }
-            _cloudFlareService.Dispose();
+
+            _dnsProviderService.Dispose();
         }
     }
 }

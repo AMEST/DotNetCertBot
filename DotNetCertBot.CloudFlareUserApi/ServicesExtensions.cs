@@ -5,9 +5,9 @@ namespace DotNetCertBot.CloudFlareUserApi
 {
     public static class ServicesExtensions
     {
-        public static IServiceCollection AddCloudFlare(this IServiceCollection services)
+        public static IServiceCollection AddCloudFlareDnsProvider(this IServiceCollection services)
         {
-            services.AddSingleton<ICloudFlareService, CloudFlareServiceSelenium>();
+            services.AddSingleton<IDnsProviderService, CloudFlareServiceSelenium>();
             return services;
         }
     }
