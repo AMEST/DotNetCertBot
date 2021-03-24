@@ -5,54 +5,60 @@ using DotNetCertBot.Domain;
 using DotNetCertBot.FreenomDnsProvider;
 using DotNetCertBot.LetsEncrypt;
 using DotNetCertBot.NoOp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Skidbladnir.Modules;
 
 namespace DotNetCertBot.Host
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static Task Main(string[] args)
         {
-            var provider = ApplicationExtensions.ConfigureApp(services =>
-            {
-                var configuration = args.CreateConfiguration();
-                var certbotConfiguration = configuration.GetConfiguration();
-                services.AddSingleton(certbotConfiguration);
-                services.AddSingleton(configuration);
-                services.AddSingleton<CertificateService>();
-                switch (certbotConfiguration.NoOp)
-                {
-                    case NoOpMode.Full:
-                        services.AddNoOpAcme();
-                        services.AddNoOpDnsProvider();
-                        break;
-                    case NoOpMode.Acme:
-                        services.AddNoOpAcme();
-                        RegisterDnsProvider(services, certbotConfiguration);
-                        break;
-                    case NoOpMode.None:
-                    default:
-                        services.AddLetsEncrypt();
-                        RegisterDnsProvider(services, certbotConfiguration);
-                        break;
-                }
-            });
+            var collection = new ServiceCollection();
+            collection.AddLogging(b => b.AddConsole()
+                .SetMinimumLevel(LogLevel.Information));
 
-            using var scope = provider.CreateScope();
-            var certificateService = scope.ServiceProvider.GetService<CertificateService>();
-            await certificateService.Issue();
+            var configuration = args.CreateConfiguration();
+            ConfigureDependedModules(configuration);
+
+            collection.AddSkidbladnirModules<StartupModule>(configuration);
+            var provider = collection.BuildServiceProvider();
+            return provider.StartModules();
         }
 
-        private static void RegisterDnsProvider(IServiceCollection services, CertBotConfiguration configuration)
+        private static void ConfigureDependedModules(IConfiguration configuration)
+        {
+            var certbotConfiguration = configuration.GetConfiguration();
+            switch (certbotConfiguration.NoOp)
+            {
+                case NoOpMode.Full:
+                    StartupModule.DynamicDependsModules.Add(typeof(AcmeNoOpModules));
+                    StartupModule.DynamicDependsModules.Add(typeof(DnsNoOpModule));
+                    break;
+                case NoOpMode.Acme:
+                    StartupModule.DynamicDependsModules.Add(typeof(AcmeNoOpModules));
+                    RegisterDnsProvider(certbotConfiguration);
+                    break;
+                case NoOpMode.None:
+                default:
+                    StartupModule.DynamicDependsModules.Add(typeof(LetsEncryptAuthorityModule));
+                    RegisterDnsProvider(certbotConfiguration);
+                    break;
+            }
+        }
+
+        private static void RegisterDnsProvider(CertBotConfiguration configuration)
         {
             switch (configuration.Provider)
             {
                 case DnsProvider.Freenom:
-                    services.AddFreenomDnsProvider();
+                    StartupModule.DynamicDependsModules.Add(typeof(FreenomDnsProviderModule));
                     break;
                 case DnsProvider.CloudFlare:
                 default:
-                    services.AddCloudFlareDnsProvider();
+                    StartupModule.DynamicDependsModules.Add(typeof(CloudFlareDnsProviderModule));
                     break;
             }
         }

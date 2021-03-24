@@ -1,14 +1,14 @@
 ﻿using DotNetCertBot.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Skidbladnir.Modules;
 
 namespace DotNetCertBot.FreenomDnsProvider
 {
-    public static class ServicesExtensions
+    public class FreenomDnsProviderModule : Module
     {
-        public static IServiceCollection AddFreenomDnsProvider(this IServiceCollection services)
+        public override void Configure(IServiceCollection services)
         {
             services.AddSingleton<IDnsProviderService, FreenomDnsProvider>();
-            return services;
         }
     }
 }

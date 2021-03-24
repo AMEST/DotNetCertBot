@@ -6,8 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Nightly-Certes" Version="2.3.4-unstalable.0.23" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.13" />
+    <PackageReference Include="Skidbladnir.Modules" Version="1.1.1-unstalable.0.1" />
   </ItemGroup>
 
   <ItemGroup>

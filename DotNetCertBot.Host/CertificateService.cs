@@ -1,7 +1,6 @@
 ﻿using DotNetCertBot.Domain;
 using System;
 using System.Threading.Tasks;
-using Certes;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetCertBot.Host
