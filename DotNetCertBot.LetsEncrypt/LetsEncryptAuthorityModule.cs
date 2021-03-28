@@ -1,14 +1,14 @@
 ﻿using DotNetCertBot.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Skidbladnir.Modules;
 
 namespace DotNetCertBot.LetsEncrypt
 {
-    public static class ServicesExtensions
+    public class LetsEncryptAuthorityModule : Module
     {
-        public static IServiceCollection AddLetsEncrypt(this IServiceCollection services)
+        public override void Configure(IServiceCollection services)
         {
             services.AddSingleton<IAcmeService, LetsEncryptService>();
-            return services;
         }
     }
 }

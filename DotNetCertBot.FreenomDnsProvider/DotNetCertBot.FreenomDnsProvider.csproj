@@ -5,9 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Skidbladnir.Client.Freenom.Dns" Version="0.0.1-build0003" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.10" />
+    <PackageReference Include="Skidbladnir.Client.Freenom.Dns" Version="1.1.1-unstalable.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.13" />
+    <PackageReference Include="Skidbladnir.Modules" Version="1.1.1-unstalable.0.1" />
+    <PackageReference Include="Skidbladnir.Utility.Common" Version="1.1.1-unstalable.0.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,14 +1,14 @@
 ﻿using DotNetCertBot.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Skidbladnir.Modules;
 
 namespace DotNetCertBot.CloudFlareUserApi
 {
-    public static class ServicesExtensions
+    public class CloudFlareDnsProviderModule : Module
     {
-        public static IServiceCollection AddCloudFlareDnsProvider(this IServiceCollection services)
+        public override void Configure(IServiceCollection services)
         {
             services.AddSingleton<IDnsProviderService, CloudFlareServiceSelenium>();
-            return services;
         }
     }
 }
