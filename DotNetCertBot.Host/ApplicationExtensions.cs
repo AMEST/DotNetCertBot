@@ -11,7 +11,12 @@ namespace DotNetCertBot.Host
         {
             var path = "";
             if (!string.IsNullOrWhiteSpace(outputPath))
+            {
                 path = outputPath;
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+            }
+
             //Write Cert
             var certFilePath = Path.Combine(path, $"{certificate.Domain}.pem");
             await using (var writer = File.CreateText(certFilePath))
