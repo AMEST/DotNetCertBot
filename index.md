@@ -1,37 +1,107 @@
-## Welcome to GitHub Pages
+![Certbot Build](https://github.com/AMEST/DotNetCertBot/workflows/Certbot%20Build/badge.svg)
+![hub.docker.com](https://img.shields.io/docker/pulls/eluki/freenom-cloudflare-certbot.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/amest/DotNetCertBot)
+![GitHub](https://img.shields.io/github/license/amest/DotNetCertBot)
 
-You can use the [editor on GitHub](https://github.com/AMEST/DotNetCertBot/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+# DotNetCertBot with cloudflare (and freenom) DNS challenge for [Freenom (tk/ml)](https://freenom.com) domains
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- [DotNetCertBot with cloudflare (and freenom) DNS challenge for Freenom (tk/ml) domains](#dotnetcertbot-with-cloudflare-and-freenom-dns-challenge-for-freenom-tkml-domains)
+  - [Links](#links)
+  - [Description](#description)
+  - [Download](#download)
+  - [How to use](#how-to-use)
+    - [Available providers](#available-providers)
+    - [CommandLine arguments:](#commandline-arguments)
+      - [Windows cmd or Linux bash](#windows-cmd-or-linux-bash)
+      - [Docker container (linux)](#docker-container-linux)
+  - [How to build](#how-to-build)
+      - [Build binaries](#build-binaries)
+      - [Build docker container](#build-docker-container)
 
-### Markdown
+## Links
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+* [Docker Hub](https://hub.docker.com/r/eluki/freenom-cloudflare-certbot)
 
-```markdown
-Syntax highlighted code block
+## Description
 
-# Header 1
-## Header 2
-### Header 3
+The app was written in connection with CloudFlare's restrictions on using its api to manage DNS records .tk .ml .cf and other free domain names from Freenom.
 
-- Bulleted
-- List
+Under the hood is a regular client up to Let's encrypt and the code for the selenium driver, where the application automatically, emulating the behavior of the login user in cloudflare, selects the desired zone, adds an entry for the DNS Challenge and after the request is validated by the certification authority, saves the certificate and deletes the entry from the DNS
 
-1. Numbered
-2. List
+Also added the ability to issue certificates for domains issued through Freenom and continue to use the standard dns provided by Freenom. To do this, you need to specify the required provider: `--provider freenom`
 
-**Bold** and _Italic_ and `Code` text
+## Download
+1. Shell:
+   1. [Windows x86 binaries](https://github.com/AMEST/DotNetCertBot/releases/latest/download/CertBot.Cli-win-x86.zip)
+   2. [Linux x64 binaries](https://github.com/AMEST/DotNetCertBot/releases/latest/download/CertBot.Cli-linux-x64.zip)
+2. [Docker container](https://hub.docker.com/r/eluki/freenom-cloudflare-certbot)
 
-[Link](url) and ![Image](src)
+## How to use
+
+### Available providers
+
+Available DNS providers for acme dns challenge:
+1. Cloudflare - Used headless chrome, for issue certificate for free freenom domains. Also suitable for another domains who use cloudflare dns
+1. Freenom - suitable for issuing certificates for domains that have been registered through Freenom or using freenom dns
+
+### CommandLine arguments:
+|  Argument  |                                                                Description                                                                |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| -e         | Required. Email for cloudflare (and it use for let's enctypt)                                                                             |
+| -p         | Required. Password for cloudflare account                                                                                                 |
+| -z         | Required. Zone name in cloudflare (main domain name)                                                                                      |
+| -d         | Required. Domain name for which the certificate is issued (is a subdomain of the zone)                                                    |
+| --provider | (Default: cloudflare) DNS provider through which the dns record will be added for validation through ACME. Providers: Cloudflare, freenom |
+| -h         | (Default: true) Selenium driver headless mode                                                                                             |
+| -o         | (Default: app directory) Directory where saved generated certificates                                                                     |
+| --noop     | (Default: None) Noop mode start half functional or test mode for tesing sctipts or schedules. NoOp modes (full,acme, none)                |
+
+#### Windows cmd or Linux bash
+For issue certificate in shell (not in container), on pc **should be installed chrome 87.xx version**. **In prepared assemblies for windows and linux, chromedriver is already included.** If chrome installed and app downloaded, you can run next command for automatic issue certificate.  
+*Windows:*
+
+```cmd
+DotNetCertBot.Host.exe -e example@gmail.com -p VerySecretCloudflarePass -z example.tk -d subdomain.example.tk
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+*Linux:*
 
-### Jekyll Themes
+```bash
+./DotNetCertBot.Host -e example@gmail.com -p VerySecretCloudflarePass -z example.tk -d subdomain.example.tk
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/AMEST/DotNetCertBot/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+When success issue certificate, in `DotNetCertBot.Host` app folder will appear two files:
 
-### Support or Contact
+1. `subdomain.example.tk.pem` - Full chain certificate file
+2. `subdomain.example.tk.key` - Private Key
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+#### Docker container (linux)
+To issue a certificate in a container, you need to mount the directory where the certificates will appear.   
+Because chrome will run inside the container, the host must have at least 200 MB of free RAM.
+For start container and issue certificate, run next command:
+```bash
+docker run -v /tmp/certbot:/certbot/certs \
+           --rm \ 
+           -it \
+           eluki/freenom-cloudflare-certbot \
+            -e example@gmail.com \
+            -p VerySecretCloudflarePass \
+            -z example.tk \
+            -d subdomain.example.tk \
+            -o certs
+```
+
+## How to build
+
+#### Build binaries
+
+Two scripts are prepared for the build, after running which, the compiled application with all dependencies, including chromedriver, will appear in the published folder.
+Scripts:
+1. `Build-linux.sh` - start build application for linux-x64
+2. `Build-winx86.bat` - start build application for win-x86   
+
+#### Build docker container
+
+```
+docker build -t certbot .
+```
