@@ -110,7 +110,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 await MouseClick(addButton);
                 var dropDown = _waiter.Until(d => d.FindElement(By.ClassName("react-select-container")));
                 await MouseClick(dropDown);
-                var txtOption = _waiter.Until(d => d.FindElement(By.Id("react-select-2-option-19")));
+                var txtOption = _waiter.Until(d => d.FindElement(By.Id("react-select-2-option-18")));
                 await MouseClick(txtOption);
                 var nameInput = _waiter.Until(d => d.FindElement(By.Name("name")));
                 nameInput.Clear();
