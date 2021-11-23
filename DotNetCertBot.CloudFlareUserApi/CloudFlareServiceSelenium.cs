@@ -130,7 +130,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 _waiter.Until(d => d.FindElement(By.XPath("//div[@data-testid = 'zone-cards']")));
                 var neededZone = _waiter.Until(d => d.FindElement(By.XPath($"//a[@data-testid = 'zone-card-{zone}']")));
                 await MouseClick(neededZone);
-                var dnsButton = _waiter.Until(d => d.FindElement(By.XPath("//a[@title = 'DNS']")));
+                var dnsButton = _waiter.Until(d => d.FindElement(By.XPath("//span[contains(text(),'DNS')]")));
                 await MouseClick(dnsButton);
             });
         }
