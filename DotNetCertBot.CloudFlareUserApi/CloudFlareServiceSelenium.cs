@@ -108,7 +108,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             {
                 var addButton = _waiter.Until(d => d.FindElement(By.XPath("//span[contains(text(),'Add record')]")));
                 await MouseClick(addButton);
-                var dropDown = _waiter.Until(d => d.FindElement(By.ClassName("//button[@id = 'downshift-0-toggle-button']")));
+                var dropDown = _waiter.Until(d => d.FindElement(By.XPath("//button[@id = 'downshift-0-toggle-button']")));
                 await MouseClick(dropDown);
                 var txtOption = _waiter.Until(d => d.FindElement(By.Id("downshift-0-item-18")));
                 await MouseClick(txtOption);
