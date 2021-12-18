@@ -41,7 +41,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 {"userAgent", RandomUserAgent.Generate()}
             });
             _driver.Navigate().GoToUrl(CloudFlareLoginUrl);
-            _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+            _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(25));
         }
 
         public async Task<bool> CheckAuth()
@@ -65,7 +65,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             var submit = _driver.FindElementsByTagName("button")
                 .SingleOrDefault(b => b.GetAttribute("type") == "submit");
             await Task.Run(() => submit?.Click());
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await Task.Delay(TimeSpan.FromSeconds(3));
             return await CheckAuth();
         }
 
