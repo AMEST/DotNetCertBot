@@ -48,8 +48,6 @@ namespace DotNetCertBot.Host
             {
                 await _dnsProviderService.ClearChallenge(_configuration.Zone, challenge.Name);
             }
-
-            _dnsProviderService.Dispose();
         }
     }
 }
