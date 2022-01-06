@@ -17,7 +17,7 @@ namespace DotNetCertBot.Host
 
         public override void Configure(IServiceCollection services)
         {
-            var certbotConfiguration = Configuration.GetConfiguration();
+            var certbotConfiguration = Configuration.AppConfiguration.GetConfiguration();
             services.AddSingleton(certbotConfiguration);
             services.AddSingleton(Configuration);
             services.AddSingleton<CertificateService>();

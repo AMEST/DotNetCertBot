@@ -23,7 +23,7 @@ namespace DotNetCertBot.Host
             var configuration = args.CreateConfiguration();
             ConfigureDependedModules(configuration);
 
-            collection.AddSkidbladnirModules<StartupModule>(configuration);
+            collection.AddSkidbladnirModules<StartupModule>(configuration: configuration);
             var provider = collection.BuildServiceProvider();
             return provider.StartModules();
         }
