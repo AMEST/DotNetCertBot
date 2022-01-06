@@ -19,7 +19,7 @@ namespace DotNetCertBot.Host
         {
             var certbotConfiguration = Configuration.AppConfiguration.GetConfiguration();
             services.AddSingleton(certbotConfiguration);
-            services.AddSingleton(Configuration);
+            services.AddSingleton(Configuration.AppConfiguration);
             services.AddSingleton<CertificateService>();
         }
 
