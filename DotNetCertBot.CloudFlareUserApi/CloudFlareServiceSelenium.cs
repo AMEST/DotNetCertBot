@@ -41,7 +41,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 {"userAgent", RandomUserAgent.Generate()}
             });
             _driver.Navigate().GoToUrl(CloudFlareLoginUrl);
-            _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(25));
+            _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(40));
         }
 
         public async Task<bool> CheckAuth()
@@ -82,11 +82,12 @@ namespace DotNetCertBot.CloudFlareUserApi
         {
             return Task.Run(async () =>
             {
-                var normalizedName = NormalizeDnsName(name, zoneName);
-                _logger.LogInformation("Remove {txtName} form zone {zoneName}", normalizedName, zoneName);
-                var dnsRecord = _waiter.Until(d =>
-                    d.FindElement(By.XPath($"//div[contains(text(),'{normalizedName}')]")));
-                await MouseClick(dnsRecord);
+                _logger.LogInformation("Remove {txtName} from zone {zoneName}", NormalizeDnsName(name, zoneName), zoneName);
+                var dnsRecordCell = _waiter.Until(d =>
+                    d.FindElement(By.XPath($"//div[contains(text(),'{name}')]")));
+                var dnsRecordRow = dnsRecordCell.GetParent().GetParent();
+                var editButton = dnsRecordRow.FindElements(By.TagName("button")).Last();
+                await MouseClick(editButton);
                 var deleteButton = _waiter.Until(d => d.FindElement(By.XPath("//button[contains(text(),'Delete')]")));
                 await MouseClick(deleteButton);
                 var iSureDeleteButton =
