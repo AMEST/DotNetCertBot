@@ -28,7 +28,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         target: certbot
         tag_with_ref: true
-        #push: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/') }}
+        push: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/') }}
 
   publish-cli-binary:
     if: contains(github.ref, 'tags/v') # works only version tagged
