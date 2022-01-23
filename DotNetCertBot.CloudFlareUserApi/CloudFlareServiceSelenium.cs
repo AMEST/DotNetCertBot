@@ -82,9 +82,10 @@ namespace DotNetCertBot.CloudFlareUserApi
         {
             return Task.Run(async () =>
             {
-                _logger.LogInformation("Remove {txtName} from zone {zoneName}", NormalizeDnsName(name, zoneName), zoneName);
+                var normalizedDnsName = NormalizeDnsName(name, zoneName);
+                _logger.LogInformation("Remove {txtName} from zone {zoneName}", normalizedDnsName, zoneName);
                 var dnsRecordCell = _waiter.Until(d =>
-                    d.FindElement(By.XPath($"//div[contains(text(),'{name}')]")));
+                    d.FindElement(By.XPath($"//div[contains(text(),'{normalizedDnsName}')]")));
                 var dnsRecordRow = dnsRecordCell.GetParent().GetParent();
                 var editButton = dnsRecordRow.FindElements(By.TagName("button")).Last();
                 await MouseClick(editButton);
