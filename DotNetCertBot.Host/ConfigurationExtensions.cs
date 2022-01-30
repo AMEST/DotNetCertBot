@@ -16,6 +16,7 @@ namespace DotNetCertBot.Host
                 {"-e", "Email"},
                 {"-p", "Password"},
                 {"-o", "Output"},
+                {"-t", "OutputType"},
                 {"-h", "Headless"},
                 {"--provider", "Provider"},
                 {"--noop", "NoOp"}

@@ -13,7 +13,7 @@ namespace DotNetCertBot.LetsEncrypt
     {
         private readonly ILogger<LetsEncryptService> _logger;
         private IAcmeContext _acme = new AcmeContext(WellKnownServers.LetsEncryptV2, badNonceRetryCount: 5);
-
+        private string _accountEmail;
         public LetsEncryptService(ILogger<LetsEncryptService> logger)
         {
             _logger = logger;
@@ -22,6 +22,7 @@ namespace DotNetCertBot.LetsEncrypt
         public async Task Login(string email)
         {
             await _acme.NewAccount(email, true);
+            _accountEmail = email;
         }
 
         public async Task<ChallengeOrder> CreateOrder(string domain)
@@ -88,7 +89,7 @@ namespace DotNetCertBot.LetsEncrypt
                 await Task.Delay(TimeSpan.FromSeconds(10));
                 cert = await TryOrderGenerate(order, challengeOrder.DnsName, privateKey);
             }
-
+            
             return new CertificateResult
             {
                 Cert = cert.ToPem(),
@@ -108,6 +109,20 @@ namespace DotNetCertBot.LetsEncrypt
                 OrganizationUnit = "Dev",
                 CommonName = dnsName,
             }, privateKey);
+        }
+
+        public async Task<Domain.AcmeAccount> GetAccount()
+        {
+            var acmeAccount = await _acme.Account();
+            var account = new Domain.AcmeAccount
+            {
+                PrivateKey = _acme.AccountKey.ToPem(),
+                Email = _accountEmail
+            };
+            account.Registration.Uri = acmeAccount.Location.ToString();
+            account.Registration.Body.Contact = new string[]{$"mailto:{_accountEmail}"};
+            
+            return account;
         }
     }
 }

@@ -1,4 +1,4 @@
-![Certbot Build](https://github.com/AMEST/DotNetCertBot/workflows/Certbot%20Build/badge.svg)
+****![Certbot Build](https://github.com/AMEST/DotNetCertBot/workflows/Certbot%20Build/badge.svg)
 ![hub.docker.com](https://img.shields.io/docker/pulls/eluki/freenom-cloudflare-certbot.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/amest/DotNetCertBot)
 ![GitHub](https://img.shields.io/github/license/amest/DotNetCertBot)
@@ -45,7 +45,7 @@ Available DNS providers for acme dns challenge:
 1. Freenom - suitable for issuing certificates for domains that have been registered through Freenom or using freenom dns
 
 ### CommandLine arguments:
-|  Argument  |                                                                Description                                                                |
+| Argument   | Description                                                                                                                               |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | -e         | Required. Email for cloudflare (and it use for let's enctypt)                                                                             |
 | -p         | Required. Password for cloudflare account                                                                                                 |
@@ -54,6 +54,7 @@ Available DNS providers for acme dns challenge:
 | --provider | (Default: cloudflare) DNS provider through which the dns record will be added for validation through ACME. Providers: Cloudflare, freenom |
 | -h         | (Default: true) Selenium driver headless mode                                                                                             |
 | -o         | (Default: app directory) Directory where saved generated certificates                                                                     |
+| -t         | (Default: pem) Certificates output type. Pem - two pem files with private key and cert; Acme - certificate in acme.json format.           |
 | --noop     | (Default: None) Noop mode start half functional or test mode for tesing sctipts or schedules. NoOp modes (full,acme, none)                |
 
 #### Windows cmd or Linux bash

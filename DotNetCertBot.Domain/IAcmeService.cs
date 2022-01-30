@@ -13,5 +13,7 @@ namespace DotNetCertBot.Domain
         Task Validate(DnsChallenge challenge);
 
         Task<CertificateResult> GetCertificate(ChallengeOrder order);
+
+        Task<AcmeAccount> GetAccount();
     }
 }
