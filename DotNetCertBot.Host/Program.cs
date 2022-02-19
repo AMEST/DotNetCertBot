@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Skidbladnir.Modules;
+using Skidbladnir.Utility.Common;
 
 namespace DotNetCertBot.Host
 {
@@ -24,8 +25,8 @@ namespace DotNetCertBot.Host
             ConfigureDependedModules(configuration);
 
             collection.AddSkidbladnirModules<StartupModule>(configuration: configuration);
-            using var provider = collection.BuildServiceProvider();
-            await provider.StartModules();
+            await using var provider = collection.BuildServiceProvider();
+            await Try.DoAsync(() => provider.StartModules());
         }
 
         private static void ConfigureDependedModules(IConfiguration configuration)

@@ -103,7 +103,8 @@ namespace DotNetCertBot.CloudFlareUserApi
             if (_driver != null)
             {
                 var screenshot = _driver.GetScreenshot();
-                screenshot.SaveAsFile("failed-view.png");
+                screenshot.SaveAsFile("last-view.png");
+                _logger.LogInformation($"Last page url: {_driver.Url}");
             }
 
             _driver?.Close();

@@ -26,9 +26,11 @@ namespace DotNetCertBot.Host
         {
             await _acme.Login(_configuration.Email);
             var isAuth = await _dnsProviderService.CheckAuth();
+            _logger.LogInformation($"Is Authenticated: {isAuth}");
             if (!isAuth)
                 if (!await _dnsProviderService.Login(_configuration.Email, _configuration.Password))
                     throw new Exception("Can't authorize in dns provider");
+            _logger.LogInformation($"Is Authenticated: {isAuth}");
 
             var order = await _acme.CreateOrder(_configuration.Domain);
             var challenge = await _acme.ChallengeDNS(order);
