@@ -41,7 +41,7 @@ namespace DotNetCertBot.CloudFlareUserApi
                 {"userAgent", RandomUserAgent.Generate()}
             });
             _driver.Navigate().GoToUrl(CloudFlareLoginUrl);
-            _waiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(40));
+            _waiter = new WebDriverWait(_driver, TimeSpan.FromMinutes(3));
         }
 
         public async Task<bool> CheckAuth()
@@ -74,7 +74,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             _logger.LogInformation("Add txt record '{txtName} to zone {zoneName}'", challenge.Name, zoneName);
             await Task.Delay(TimeSpan.FromSeconds(10));
             await GoToZoneDns(zoneName);
-            await Task.Delay(TimeSpan.FromMilliseconds(640));
+            await Task.Delay(TimeSpan.FromSeconds(6));
             await AddTxtRecord(NormalizeDnsName(challenge.Name, zoneName), challenge.Value);
         }
 
@@ -100,6 +100,12 @@ namespace DotNetCertBot.CloudFlareUserApi
 
         public void Dispose()
         {
+            if (_driver != null)
+            {
+                var screenshot = _driver.GetScreenshot();
+                screenshot.SaveAsFile("failed-view.png");
+            }
+
             _driver?.Close();
             _driver?.Dispose();
         }
@@ -110,7 +116,9 @@ namespace DotNetCertBot.CloudFlareUserApi
             {
                 var addButton = _waiter.Until(d => d.FindElement(By.XPath("//span[contains(text(),'Add record')]")));
                 await MouseClick(addButton);
-                var dropDown = _waiter.Until(d => d.FindElement(By.XPath("//button[@id = 'downshift-0-toggle-button']")));
+                var addRecordForm = _waiter.Until(d => d.FindElement(By.XPath("//div[@data-testid = 'dns-table-record-form']")));
+                var dropDown = addRecordForm.FindElements(By.TagName("button")).First(b =>
+                    b.GetAttribute("id").Contains("downshift") && b.GetAttribute("id").Contains("toggle-button"));
                 await MouseClick(dropDown);
                 var txtOption = _waiter.Until(d => d.FindElement(By.XPath("//li[contains(text(),'TXT')]")));
                 await MouseClick(txtOption);

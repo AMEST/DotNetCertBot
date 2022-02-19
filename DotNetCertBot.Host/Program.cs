@@ -14,7 +14,7 @@ namespace DotNetCertBot.Host
 {
     public class Program
     {
-        public static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var collection = new ServiceCollection();
             collection.AddLogging(b => b.AddConsole()
@@ -24,8 +24,8 @@ namespace DotNetCertBot.Host
             ConfigureDependedModules(configuration);
 
             collection.AddSkidbladnirModules<StartupModule>(configuration: configuration);
-            var provider = collection.BuildServiceProvider();
-            return provider.StartModules();
+            using var provider = collection.BuildServiceProvider();
+            await provider.StartModules();
         }
 
         private static void ConfigureDependedModules(IConfiguration configuration)

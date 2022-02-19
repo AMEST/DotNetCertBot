@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Skidbladnir.Utility.Common;
 
 namespace DotNetCertBot.Host
 {
