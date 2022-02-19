@@ -53,20 +53,25 @@ namespace DotNetCertBot.FreenomDnsProvider
 
         public async Task ClearChallenge(string zoneName, string id)
         {
-            var zones = await Retry.Do(async () => await _client.GetZones(), RetryCount, RetryDelay);
-            var neededZone = zones.FirstOrDefault(z => z.Name.Equals(zoneName, StringComparison.OrdinalIgnoreCase));
-            if (neededZone == null)
-                throw new Exception($"Zone ({zoneName}) not found");
+            await Retry.Do(async () =>
+            {
+                var zones = await Retry.Do(async () => await _client.GetZones(), RetryCount, RetryDelay);
+                var neededZone = zones.FirstOrDefault(z => z.Name.Equals(zoneName, StringComparison.OrdinalIgnoreCase));
+                if (neededZone == null)
+                    throw new Exception($"Zone ({zoneName}) not found");
 
-            var records = await Retry.Do(async () => await _client.GetDnsRecords(neededZone), RetryCount, RetryDelay);
-            var neededRecord = records.FirstOrDefault(r =>
-                r.Name.Equals(NormalizeDnsName(id, zoneName), StringComparison.OrdinalIgnoreCase) &&
-                r.Type == DnsRecordType.TXT);
+                var records = await Retry.Do(async () => await _client.GetDnsRecords(neededZone), RetryCount,
+                    RetryDelay);
+                var neededRecord = records.FirstOrDefault(r =>
+                    r.Name.Equals(NormalizeDnsName(id, zoneName), StringComparison.OrdinalIgnoreCase) &&
+                    r.Type == DnsRecordType.TXT);
 
-            if (neededRecord == null)
-                throw new Exception($"Dns record ({id}) not found");
+                if (neededRecord == null)
+                    throw new Exception($"Dns record ({id}) not found");
 
-            await Retry.Do(async () => await _client.RemoveDnsRecord(neededZone, neededRecord), RetryCount, RetryDelay);
+                await Retry.Do(async () => await _client.RemoveDnsRecord(neededZone, neededRecord), RetryCount,
+                    RetryDelay);
+            }, RetryCount, RetryDelay);
         }
 
         public void Dispose()
