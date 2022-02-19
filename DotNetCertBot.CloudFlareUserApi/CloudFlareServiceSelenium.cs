@@ -22,7 +22,8 @@ namespace DotNetCertBot.CloudFlareUserApi
         public CloudFlareServiceSelenium(IConfiguration configuration, ILogger<CloudFlareServiceSelenium> logger)
         {
             _logger = logger;
-            _logger.LogInformation("Initialize Chrome driver");
+            var userAgent = RandomUserAgent.Generate();
+            _logger.LogInformation($"Initialize Chrome driver with userAgent: {userAgent}");
             var chromeOptions = new ChromeOptions();
             if (configuration.IsHeadless())
             {
@@ -38,7 +39,7 @@ namespace DotNetCertBot.CloudFlareUserApi
             _driver.ExecuteScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
             _driver.ExecuteChromeCommand("Network.setUserAgentOverride", new Dictionary<string, object>
             {
-                {"userAgent", RandomUserAgent.Generate()}
+                {"userAgent", userAgent}
             });
             _driver.Navigate().GoToUrl(CloudFlareLoginUrl);
             _waiter = new WebDriverWait(_driver, TimeSpan.FromMinutes(3));
