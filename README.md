@@ -3,6 +3,8 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/amest/DotNetCertBot)
 ![GitHub](https://img.shields.io/github/license/amest/DotNetCertBot)
 
+# !!!NOTICE: Clouflare DNS challenge temporary not working. Cloudflare add `reCaptcha` on login page and are now looking for ways to bypass the restrictions.!!!
+
 # DotNetCertBot with cloudflare (and freenom) DNS challenge for [Freenom (tk/ml)](https://freenom.com) domains
 
 - [DotNetCertBot with cloudflare (and freenom) DNS challenge for Freenom (tk/ml) domains](#dotnetcertbot-with-cloudflare-and-freenom-dns-challenge-for-freenom-tkml-domains)
