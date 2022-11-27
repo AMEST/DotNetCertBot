@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DotNetCertBot.Domain;
@@ -8,14 +7,18 @@ using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
+using Selenium.Extensions;
+using Selenium.WebDriver.UndetectedChromeDriver;
 
 namespace DotNetCertBot.CloudFlareUserApi
 {
     public class CloudFlareServiceSelenium : IDnsProviderService
     {
         private readonly ILogger<CloudFlareServiceSelenium> _logger;
-        private readonly ChromeDriver _driver;
+        private readonly SlDriver _driver;
+        private readonly IWebDriver _secondTab;
         private readonly WebDriverWait _waiter;
         private const string CloudFlareLoginUrl = "https://dash.cloudflare.com/login?lang=en-US";
 
@@ -32,23 +35,24 @@ namespace DotNetCertBot.CloudFlareUserApi
             }
 
             chromeOptions.AddExcludedArgument("enable-automation");
-            chromeOptions.AddAdditionalCapability("useAutomationExtension", false);
             chromeOptions.AddArgument("--disable-blink-features=AutomationControlled");
             chromeOptions.AddArgument("--lang=en-US");
-            _driver = new ChromeDriver(chromeOptions);
+            _driver = UndetectedChromeDriver.Instance("test", chromeOptions);
             _driver.ExecuteScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-            _driver.ExecuteChromeCommand("Network.setUserAgentOverride", new Dictionary<string, object>
-            {
-                {"userAgent", userAgent}
-            });
-            _driver.Navigate().GoToUrl(CloudFlareLoginUrl);
-            _waiter = new WebDriverWait(_driver, TimeSpan.FromMinutes(3));
+            // _driver.ExecuteCustomDriverCommand("Network.setUserAgentOverride", new Dictionary<string, object>
+            // {
+            //     {"userAgent", userAgent}
+            // });
+            _driver.ExecuteScript("window.open()");
+            _secondTab = _driver.SwitchTo().NewWindow(WindowType.Tab);
+            _secondTab.Navigate().GoToUrl(CloudFlareLoginUrl);
+            _waiter = new WebDriverWait(_secondTab, TimeSpan.FromMinutes(3));
         }
 
         public async Task<bool> CheckAuth()
         {
             await Task.Delay(TimeSpan.FromSeconds(10));
-            var spanList = _driver.FindElementsByTagName("span");
+            var spanList = _secondTab.FindElements(By.TagName("span"));
             return await Task.Run(() =>
                 !spanList.Any(span => span.Text.Equals("Log in to Cloudflare", StringComparison.OrdinalIgnoreCase)));
         }
@@ -56,16 +60,23 @@ namespace DotNetCertBot.CloudFlareUserApi
         public async Task<bool> Login(string login, string password)
         {
             _logger.LogInformation("Login into cloudflare with email {email}", login);
-            var loginInput = _driver.FindElementByName("email");
-            var passwordInput = _driver.FindElementByName("password");
+            var loginInput = _secondTab.FindElement(By.Name("email"));
+            var passwordInput = _secondTab.FindElement(By.Name("password"));
+            await MouseClick(loginInput);
             loginInput.Clear();
             loginInput.SendKeys(login);
+            await MouseClick(passwordInput);
             passwordInput.Clear();
             passwordInput.SendKeys(password);
-
-            var submit = _driver.FindElementsByTagName("button")
-                .SingleOrDefault(b => b.GetAttribute("type") == "submit");
-            await Task.Run(() => submit?.Click());
+            await Task.Delay(200);
+            var captcha = _secondTab.FindElement(By.TagName("iframe"));
+            if(captcha != null)
+            {
+                var frame = _secondTab.SwitchTo().Frame(captcha);
+                await MouseClick(frame.FindElement(By.TagName("input")));
+            }
+            await Task.Delay(200);
+            passwordInput.Submit();
             await Task.Delay(TimeSpan.FromSeconds(3));
             return await CheckAuth();
         }
@@ -101,15 +112,15 @@ namespace DotNetCertBot.CloudFlareUserApi
 
         public void Dispose()
         {
-            if (_driver != null)
+            if (_secondTab != null)
             {
-                var screenshot = _driver.GetScreenshot();
+                var screenshot = _secondTab.TakeScreenshot();
                 screenshot.SaveAsFile("last-view.png");
-                _logger.LogInformation($"Last page url: {_driver.Url}");
+                _logger.LogInformation($"Last page url: {_secondTab.Url}");
             }
 
-            _driver?.Close();
-            _driver?.Dispose();
+            _secondTab?.Close();
+            _secondTab?.Dispose();
         }
 
         private async Task AddTxtRecord(string name, string value)
@@ -150,7 +161,7 @@ namespace DotNetCertBot.CloudFlareUserApi
         private async Task MouseClick(IWebElement element)
         {
             await Task.Delay(TimeSpan.FromMilliseconds(200));
-            var action = new Actions(_driver);
+            var action = new Actions(_secondTab);
             action.MoveByOffset(element.Location.X, element.Location.Y);
             await Task.Delay(TimeSpan.FromMilliseconds(200));
             action.Click(element);

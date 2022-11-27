@@ -6,7 +6,7 @@ RUN dotnet publish ./DotNetCertBot.Host/DotNetCertBot.Host.csproj -c Release --s
     dotnet nuget locals http-cache --clear;\
     dotnet nuget locals temp --clear
 
-FROM selenium/standalone-chrome:98.0 as certbot
+FROM selenium/standalone-chrome:107.0 as certbot
 COPY --from=build /app /certbot
 WORKDIR /certbot
 USER root

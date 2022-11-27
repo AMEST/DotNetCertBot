@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DotNetCertBot.Host",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-DotNetCertBot.Host",
+            "program": "${workspaceFolder}/DotNetCertBot.Host/bin/Debug/netcoreapp3.1/DotNetCertBot.Host.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DotNetCertBot.Host",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}
